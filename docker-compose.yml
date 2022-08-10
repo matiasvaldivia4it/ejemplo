@@ -1,0 +1,27 @@
+version: '2'
+services: 
+  app: 
+    build: "."
+    container_name: app
+    links: 
+      - mongo
+    ports: 
+      - "3000:3000"
+    restart: always
+  mongo: 
+    container_name: mongo
+    image: mongo
+    ports: 
+      - "27017:27017"
+    volumes: 
+      - "./data:/data/db"
+  web: 
+    container_name: web
+    image: nginx
+    links: 
+      - app
+    ports: 
+      - "80:80"
+    volumes: 
+      - "./config/api.conf:/etc/nginx/conf.d/default.conf"
+      - "../www:/usr/share/nginx/html"
